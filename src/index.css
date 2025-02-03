@@ -1,0 +1,67 @@
+body {
+    background-color: rgb(39, 39, 38);
+    font-family: Helvetica;
+    margin: 5px;
+}
+
+h2 {
+    color: lightgray;
+    margin: 2px;
+    padding: 1px;
+}
+
+button {
+    margin-right: 5px;
+    margin-bottom: 2px;
+    background-color: aliceblue;
+    border-radius: 5px;
+    border-color: grey;
+}
+
+button:hover {
+    background-color: rgb(221, 14, 14);
+    color: black;
+}
+
+#add {
+    margin: 2px;
+}
+
+#add:hover {
+    background-color: rgb(48, 221, 14);
+    color: black;
+}
+
+input {
+    display: flex;
+    margin: 2px;
+    background-color: aliceblue;
+    border-radius: 5px;
+}
+
+ul {
+    display: inline-block;
+    background-color: lightgrey;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 1px;
+}
+
+li {
+    font-family: 'Trebuchet MS';
+    list-style: none;
+}
+
+.confirm {
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+    padding: 10px;
+
+}
+form{
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 15px;
+    background-color: lightgray;
+}
