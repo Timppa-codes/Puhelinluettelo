@@ -13,6 +13,7 @@ h2 {
 button {
     margin-right: 5px;
     margin-bottom: 2px;
+    color: black;
     background-color: aliceblue;
     border-radius: 5px;
     border-color: grey;
