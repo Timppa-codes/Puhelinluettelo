@@ -67,13 +67,13 @@ const App = () => {
       }
       //else kontakti on uusi
     } else {
-      setPersons(persons.concat(newContact))
-      setNewName('')
-      setNewNumber('')
-      //luodaan uusi kontakti myös palvelimelle
+      //luodaan uusi kontakti palvelimelle
       contactService
         .create(newContact)
         .then(response => {
+          //tyhjennetään nimikenttä
+          setNewName('')
+          setNewNumber('')
           //asetetaan confirm viestiksi onnistunut lisäys
           setConfirmMessage(
             `Contact ${newName} added from server`
