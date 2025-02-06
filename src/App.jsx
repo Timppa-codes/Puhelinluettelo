@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
-import contactService from './services/persons'
+import contactService from './services/contacts'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [confirmMessage, setConfirmMessage] = useState('')
+  const [confimMessage, setConfirmMessage] = useState('')
 
   useEffect(() => {
     contactService
@@ -24,95 +24,40 @@ const App = () => {
       number: newNumber
     }
     if (persons.find((element) => element.name === newName)) {
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        //käyttäjä valitsee ok. Haetaan tiedot tieokannasta
-        contactService
-          .getAll()
-          .then(response => {
-            //hakeminen onnistui, joten käydään läpi kontaktit ja jos löytyy vastaavuus
-            //tulostetaan löydetyn nimen sen hetkinen id muuttujaan updateid
-            response.data.map(map => {
-              if (map.name === newName) {
-                const updateid = map.id
-                contactService
-                  //päivitetään kontakti tietokantaan
-                  .update(updateid, newContact)
-                  .then(response => {
-                    //onnistunut numeronpäivitys asetetaan confim viestiksi
-                    setConfirmMessage(
-                      `Contact ${newName} phonenumber ${newNumber} updated from server`
-                    )
-                    setTimeout(() => {
-                      setConfirmMessage(null)
-                    }, 3000)
-                    ////////////////
-                    //asetetaan nimi ja numero kentät tyhjäksi
-                    setNewName('')
-                    setNewNumber('')
-                    //then saatu vastaus onnistumisesta
-                    //ladataan uusin versio tiedostosta palvelimelta
-                    contactService
-                      .getAll()
-                      .then(response => {
-                        setPersons(response.data)
-                      })
-                  })
-              }
-            })
-          })
-        //else if käyttäjä valitsee olla päivittämättä kontaktia
-      } else {
-        setNewName('')
-        setNewNumber('')
-      }
-      //else kontakti on uusi
+      alert(`${newName} is already added to phonebook`)
+      setNewName('')
+      setNewNumber('')
     } else {
-      //luodaan uusi kontakti palvelimelle
       contactService
         .create(newContact)
-        .then(response => {
-          //tyhjennetään nimikenttä
+        .then(promise => {
+          setPersons(persons.concat(promise.data))
           setNewName('')
           setNewNumber('')
           //asetetaan confirm viestiksi onnistunut lisäys
           setConfirmMessage(
-            `Contact ${newName} added from server`
+            `Added ${newName}`
           )
           setTimeout(() => {
             setConfirmMessage(null)
           }, 2000)
-          //then saatu vastaus onnistumisesta
-          //ladataan uusin versio tiedostosta palvelimelta
-          contactService
-            .getAll()
-            .then(response => {
-              setPersons(response.data)
-            })
         })
     }
   }
 
   const removeContact = (event) => {
-    //kysytään vielä varmistus ennen poistamista
     if (window.confirm(`Delete ${event.target.id} ?`)) {
-      //pyydetään poistamaan tietyn nappulan id:n mukainen kontakti
       contactService
         .remove(event.target.value)
-        .then(response => {
+        .then(() => {
+          setPersons(persons.filter(contact => contact.name !== event.target.id))
           //asetetaan confirm viestiksi onnistunut poisto
           setConfirmMessage(
-            `Contact ${event.target.id} removed from server`
+            `Deleted ${event.target.id}`
           )
           setTimeout(() => {
             setConfirmMessage(null)
           }, 3000)
-          //then saatu vastaus onnistumisesta
-          //ladataan uusin versio tiedostosta palvelimelta
-          contactService
-            .getAll()
-            .then(response => {
-              setPersons(response.data)
-            })
         })
     }
   }
@@ -127,7 +72,7 @@ const App = () => {
 
   return (
     <div>
-      <Notification message={confirmMessage}/>
+      <Notification message={confimMessage} />
       <h2>Phonebook</h2>
       <PersonForm
         newName={newName}
@@ -151,7 +96,7 @@ const Notification = ({ message }) => {
     return null
   }
   return (
-    <div className="confirm">
+    <div className='confirm'>
       {message}
     </div>
   )
